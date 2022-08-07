@@ -2,9 +2,10 @@ import { createSlice, createAsyncThunk, createAction } from "@reduxjs/toolkit";
 import type { PayloadAction } from "@reduxjs/toolkit";
 import type { RootState } from "../store";
 import axios from "axios";
+import { ProductsTypes } from "../pages/Home";
 
 interface ProductsState {
-  products: string[];
+  products: ProductsTypes[] | null;
   loading: string;
   error: string;
 }
@@ -16,7 +17,7 @@ const initialState: ProductsState = {
 };
 
 export const fetchProducts = createAsyncThunk<any>(
-  "products/fetchProducts1",
+  "products/fetchProducts",
   async () => {
     try {
       const { data } = await axios.get("/api/products");
@@ -63,9 +64,9 @@ export const productsSlice = createSlice<any>({
         products: action.payload,
         error: "",
       }))
-      .addCase(fetchProducts.rejected, (_, action) => ({
+      .addCase(fetchProducts.rejected, () => ({
         loading: false,
-        error: action.payload,
+        error: "some thing went wrong",
         products: [],
       })),
 });
