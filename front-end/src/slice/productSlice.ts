@@ -5,22 +5,22 @@ import axios from "axios";
 import { ProductsTypes } from "../pages/Home";
 
 interface ProductsState {
-  products: ProductsTypes[] | null;
+  product: {};
   loading: string;
   error: string;
 }
 
 const initialState: ProductsState = {
-  products: [],
+  product: {},
   loading: "",
   error: "",
 };
 
-export const fetchProducts = createAsyncThunk<any>(
-  "products/fetchProducts",
-  async () => {
+export const fetchProduct = createAsyncThunk<any>(
+  "products/fetchProduct",
+  async (id) => {
     try {
-      const { data } = await axios.get("/api/products");
+      const { data } = await axios.get(`/api/products/${id}`);
       return data;
     } catch (error) {
       return error;
@@ -29,8 +29,8 @@ export const fetchProducts = createAsyncThunk<any>(
 );
 
 // @ts-ignore
-export const productsSlice = createSlice<any>({
-  name: "products",
+export const productSlice = createSlice<any>({
+  name: "product",
   initialState,
   reducers: {},
   // extraReducers: (builder) => {
@@ -54,21 +54,23 @@ export const productsSlice = createSlice<any>({
   extraReducers: (builder) =>
     builder
 
-      .addCase(fetchProducts.pending, () => ({
+      .addCase(fetchProduct.pending, () => ({
         loading: true,
-        products: [],
+        product: [],
         error: "",
       }))
-      .addCase(fetchProducts.fulfilled, (state, action) => ({
+      .addCase(fetchProduct.fulfilled, (state, action) => ({
         loading: false,
-        products: action.payload,
+        product: action.payload,
         error: "",
       }))
-      .addCase(fetchProducts.rejected, (state, action) => ({
+      .addCase(fetchProduct.rejected, (state, action) => ({
         loading: false,
         error: action.payload,
-        products: [],
+        product: [],
       })),
 });
 
-export default productsSlice.reducer;
+
+
+export default productSlice.reducer;

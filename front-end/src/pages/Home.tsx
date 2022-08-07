@@ -32,13 +32,14 @@ function Home() {
     dispatch(fetchProducts());
   }, []);
 
+  // @ts-ignore
   return (
     <section className="mt-3">
       <div className="container mx-auto">
         {loading ? (
           <p>loading</p>
         ) : error ? (
-          <p>error</p>
+          <p>d</p>
         ) : (
           <div className="grid gap-4 grid-cols-4">
             {products.map((product: any) => (
