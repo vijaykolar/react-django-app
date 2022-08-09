@@ -1,34 +1,36 @@
-import React, {useEffect, useState} from "react";
+import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import axios from 'axios';
-import {fetchProducts} from "../slice/productsSlice";
-import {fetchProduct} from "../slice/productSlice";
-import {useDispatch, useSelector} from "react-redux";
-import {ProductsTypes} from "./Home";
+import axios from "axios";
+import { fetchProducts } from "../slice/productsSlice";
+import { fetchProduct } from "../slice/productSlice";
+import { useDispatch, useSelector } from "react-redux";
+import { ProductsTypes } from "./Home";
 
 type Product = {
   name: string;
-  image:string;
+  image: string;
   description: string;
   price: number;
   countInStock: number;
-}
+};
 
-interface Loading  {
-  loading: boolean,
+interface Loading {
+  loading: boolean;
 }
 
 type Error = {
   error: string;
-}
+};
 
 function Product() {
   const params = useParams();
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
   // @ts-ignore
   const { product } = useSelector<Product>((state) => state.product);
   const loading = useSelector<any>((state) => state.product.loading);
   const error = useSelector<any>((state) => state.product.error);
+
+  const [value, setValue] = useState<number>(1);
 
   useEffect(() => {
     // @ts-ignore
@@ -52,8 +54,9 @@ function Product() {
   //   getProduct()
   // }, [params.id]);
 
-  if (loading) return <p>loading</p>
-  if (error) return <p>q</p>
+  if (loading) return <p>loading</p>;
+  if (error) return <p>q</p>;
+  // @ts-ignore
   // @ts-ignore
   // @ts-ignore
   return (
@@ -61,7 +64,11 @@ function Product() {
       <div className="container mx-auto">
         <div className="grid gap-4 grid-cols-2">
           <div className="border p-2 rounded">
-            <img className="max-h-72 mx-auto" src={product?.image} alt={product?.name} />
+            <img
+              className="max-h-72 mx-auto"
+              src={product?.image}
+              alt={product?.name}
+            />
           </div>
           <div className="grid gap-4 grid-cols-2">
             <div>
@@ -86,13 +93,32 @@ function Product() {
                 </div>
               </div>
 
-              <div>
+              {product.countInStock > 0 && (
+                <div className="flex justify-between gap-2 border-b border-gray-300 mb-3 pb-3">
+                  <div>
+                    <p className="text-gray-700 text-sm">Qty:</p>
+                  </div>
 
-                {
-                 // productroduct.countInStock.
-                  // [...Array(product?.countInStock).keys()].map(el => <p>el</p>)
-                }
-              </div>
+                  <select
+                    value={value}
+                    onChange={(e) => setValue(+e.target.value)}
+                    className="p-2"
+                    name=""
+                    id=""
+                  >
+                    {
+                      // [...Array(product.countInStock).keys()]
+                      Array.from(Array(product.countInStock).keys()).map(
+                        (el) => (
+                          <option key={el + 1} value={el + 1}>
+                            {el + 1}
+                          </option>
+                        )
+                      )
+                    }
+                  </select>
+                </div>
+              )}
 
               <button
                 disabled={product?.countInStock === 0}
