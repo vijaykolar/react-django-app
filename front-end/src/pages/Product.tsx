@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
 import { fetchProducts } from "../slice/productsSlice";
 import { fetchProduct } from "../slice/productSlice";
@@ -24,6 +24,7 @@ type Error = {
 
 function Product() {
   const params = useParams();
+  const navigate = useNavigate();
   const dispatch = useDispatch();
   // @ts-ignore
   const { product } = useSelector<Product>((state) => state.product);
@@ -36,6 +37,11 @@ function Product() {
     // @ts-ignore
     dispatch(fetchProduct(params.id));
   }, []);
+
+  const addItemToCart = () => {
+    console.log(params.id);
+    navigate(`/cart/${params.id}?qty=${value}`);
+  };
   // const product = products.find((prod) => prod._id === params.id);
 
   // useEffect(() => {
@@ -122,7 +128,7 @@ function Product() {
 
               <button
                 disabled={product?.countInStock === 0}
-                onClick={() => console.log("added to cart")}
+                onClick={addItemToCart}
                 className={`${
                   product?.countInStock === 0
                     ? "bg-gray-500 cursor-not-allowed"
