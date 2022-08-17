@@ -59,18 +59,19 @@ export const productSlice = createSlice<any>({
         product: [],
         error: "",
       }))
-      .addCase(fetchProduct.fulfilled, (state, action) => ({
-        loading: false,
-        product: action.payload,
-        error: "",
-      }))
+      .addCase(
+        fetchProduct.fulfilled,
+        (state, action: PayloadAction<ProductsState>) => ({
+          loading: false,
+          product: action.payload,
+          error: "",
+        })
+      )
       .addCase(fetchProduct.rejected, (state, action) => ({
         loading: false,
         error: action.payload,
         product: [],
       })),
 });
-
-
 
 export default productSlice.reducer;
